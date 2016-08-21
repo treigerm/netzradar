@@ -28,3 +28,4 @@ with open("bundeslaender_connectivity.geojson", "w+") as f:
     json.dump(data, f)
 
 # TODO: Transform decimals into percent values
+# TODO: Clean data

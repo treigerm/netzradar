@@ -42,6 +42,23 @@ function makeGraphs(error, geojson) {
     .labelOffsetY(12)
     .xAxis().tickValues([0, 0.5, 1]);
 
+    var map = L.map("map");
+
+    var drawMap = function() {
+        map.setView([51.9, 10.26], 5);
+        mapLink = '<a href="http://openstreetmap.org">OpenStreetMap</a>';
+        L.tileLayer(
+        'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; ' + mapLink + ' Contributors',
+            maxZoom: 15,
+        }).addTo(map);
+
+        L.geoJson(records).addTo(map);
+    };
+
+    drawMap();
+
+    // Display the dc graphs
     dc.renderAll();
 }
 
