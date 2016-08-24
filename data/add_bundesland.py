@@ -19,7 +19,7 @@ def make_features(feature):
     features = []
 
     try:
-        first_long = feature["geometry"]["coordinates"][0][0] 
+        first_long = feature["geometry"]["coordinates"][0][0]
         first_lat = feature["geometry"]["coordinates"][0][1]
         bundesland = get_bundesland(first_long, first_lat, bundeslaender)
     except:
@@ -63,4 +63,5 @@ with open("bundeslaender_connectivity.geojson", "w+") as f:
     json.dump(featureCollection, f)
 
 # TODO: Transform decimals into percent values
-# TODO: Clean data
+
+# Total number of measurements: 1746092

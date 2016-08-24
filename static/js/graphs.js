@@ -23,11 +23,19 @@ function makeGraphs(error, geojson) {
                                        .reduce(reduceAddAvg, reduceRemoveAvg, reduceInitAvg);
 
     var providerGroup = providerDim.group()
-                                       .reduce(reduceAddAvg, reduceRemoveAvg, reduceInitAvg);
+                                   .reduce(reduceAddAvg, reduceRemoveAvg, reduceInitAvg);
+
+    var measurementsGroup = ndx.groupAll().reduceSum(function(d) { return d.properties.measurements; });
 
     // Create charts
+    var numberMeasurements = dc.numberDisplay("#number-measurements-nd");
     var bundeslandChart = dc.rowChart("#bundesland-row-chart");
     var providerChart = dc.rowChart("#provider-row-chart");
+
+    numberMeasurements
+    .formatNumber(d3.format("d"))
+    .valueAccessor(function(d) { return d; })
+    .group(measurementsGroup);
 
     bundeslandChart
     .width(400)
