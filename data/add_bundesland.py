@@ -14,6 +14,7 @@ def get_bundesland(longitude, latitude, bundeslaender):
     return "other"
 
 
+
 def make_features(feature):
     providers = ["all", "t-mobile", "vodafone", "e-plus", "o2"]
     features = []
@@ -21,9 +22,12 @@ def make_features(feature):
     try:
         first_long = feature["geometry"]["coordinates"][0][0]
         first_lat = feature["geometry"]["coordinates"][0][1]
-        bundesland = get_bundesland(first_long, first_lat, bundeslaender)
-    except:
-        # exit if we cannot determine bundesland
+    except: # TODO: Specific exceptions
+        return
+
+    bundesland = get_bundesland(first_long, first_lat, bundeslaender)
+    if bundesland == "other":
+        # Don't add route if we cannot determine bundesland
         return
 
     for provider in providers:
@@ -31,6 +35,7 @@ def make_features(feature):
         measurements = feature["properties"][provider + "_measurements"]
 
         if measurements == 0:
+            # Don't add provider if there are no measurements
             continue
 
         features.append({
@@ -56,12 +61,9 @@ featureCollection = {
 
 for feature in tqdm(data["features"]):
     newFeatures = make_features(feature)
-    featureCollection["features"].extend(newFeatures)
+    if newFeatures:
+        featureCollection["features"].extend(newFeatures)
 
 
 with open("bundeslaender_connectivity.geojson", "w+") as f:
     json.dump(featureCollection, f)
-
-# TODO: Transform decimals into percent values
-
-# Total number of measurements: 1746092

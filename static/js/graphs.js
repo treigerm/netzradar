@@ -69,6 +69,25 @@ function makeGraphs(error, geojson) {
         connectivityLayer.setGeoJSON(allDim.top(Infinity)).addTo(map);
     };
 
+    // Ensure that if "all" is selected and you click on another provider
+    // we deselect all again.
+    var oc = providerChart.onClick;
+    // TODO: Try to do this with less conditionals
+    providerChart.onClick = function (d) {
+        var had_all = providerChart.filters().indexOf("all") >= 0;
+        if(d.key === "all") {
+            providerChart.filter(null);
+            if (!had_all) {
+                oc.call(providerChart, d);
+            } else {
+                providerChart.redrawGroup();
+            }
+        } else {
+            if (had_all) providerChart.filter(null);
+            oc.call(providerChart, d);
+        }
+    };
+    // Select "all" in the beginning
     providerChart.filter("all");
 
     drawMap();
