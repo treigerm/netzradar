@@ -72,20 +72,27 @@ function makeGraphs(error, geojson) {
     // Ensure that if "all" is selected and you click on another provider
     // we deselect all again.
     var oc = providerChart.onClick;
-    // TODO: Try to do this with less conditionals
-    providerChart.onClick = function (d) {
-        var had_all = providerChart.filters().indexOf("all") >= 0;
-        if(d.key === "all") {
-            providerChart.filter(null);
-            if (!had_all) {
-                oc.call(providerChart, d);
-            } else {
-                providerChart.redrawGroup();
-            }
-        } else {
-            if (had_all) providerChart.filter(null);
-            oc.call(providerChart, d);
+    providerChart.onClick = function(d) {
+        var filters = providerChart.filters();
+
+        var is_last = filters.length === 1;
+        var deselect = d.key === filters[0];
+        if (is_last && deselect) {
+            // If this is the last selected provider and
+            // we want to deselect it, then do nothing.
+            return;
         }
+
+        var had_all = filters.indexOf("all") >= 0;
+        var select_all = d.key === "all";
+        if (had_all || select_all) {
+            // If "all" was selected or we want to select "all"
+            // remove the previous filters.
+            providerChart.filter(null);
+        }
+
+        // Process the click action
+        oc.call(providerChart, d);
     };
     // Select "all" in the beginning
     providerChart.filter("all");
