@@ -1,0 +1,18 @@
+{
+  "name": "netzradar",
+  "description": "Visualisation of DB Open Data dataset",
+  "main": "",
+  "authors": [
+    "Tim Reichelt"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
