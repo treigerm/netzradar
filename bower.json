@@ -14,5 +14,17 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "dependencies": {
+    "jquery": "3.1.0",
+    "bootstrap": "3.3.7",
+    "keen-dashboards": "",
+    "keen-js": "3.4.1",
+    "d3": "",
+    "crossfilter": "",
+    "dcjs": "",
+    "leaflet": "0.7.7",
+    "mapbox.js": "v2.4.0",
+    "d3-queue": "1.0.7"
+  }
 }
