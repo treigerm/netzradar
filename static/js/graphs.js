@@ -60,13 +60,29 @@ function makeGraphs(error, geojson) {
     .xAxis().tickValues([0, 0.5, 1]).ticks(3);
 
     L.mapbox.accessToken = "pk.eyJ1IjoidHJlaWdlcm0iLCJhIjoiY2lzNXU4bzllMDAwZTJ5bXcwajA1ZjdvYSJ9.OA1zmwAiQpIqL3tcHmBddg";
+
+    // TODO: Use basic map
     var map = L.mapbox.map("map", "mapbox.streets");
     var connectivityLayer = L.mapbox.featureLayer();
 
     var drawMap = function() {
+        // Center map in Germany
         map.setView([51.9, 10.26], 5);
 
+        // Add all selected rails
         connectivityLayer.setGeoJSON(allDim.top(Infinity)).addTo(map);
+
+        connectivityLayer.eachLayer(function(layer) {
+            // Function to scale the values in the interval [0.85,1] to the
+            // interval [0,1]
+            var customOpacity = (layer.feature.properties.stability - 0.85) / 0.15;
+
+            // TODO: Styling
+            layer.setStyle({
+                color: "#279E15",
+                opacity: customOpacity
+            });
+        });
     };
 
     // Ensure that if "all" is selected and you click on another provider
