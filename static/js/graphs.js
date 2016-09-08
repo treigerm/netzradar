@@ -50,7 +50,7 @@ function makeGraphs(error, geojson) {
 
     providerChart
     .width(400)
-    .height(420)
+    .height(280)
     .dimension(providerDim)
     .group(providerGroup)
     .ordering(function(d) { return -d.value.avg; })
@@ -78,8 +78,8 @@ function makeGraphs(error, geojson) {
         var is_last = filters.length === 1;
         var deselect = d.key === filters[0];
         if (is_last && deselect) {
-            // If this is the last selected provider and
-            // we want to deselect it, then do nothing.
+            // If this is the last selected provider
+            // and we want to deselect it, then we do nothing.
             return;
         }
 
