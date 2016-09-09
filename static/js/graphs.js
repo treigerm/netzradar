@@ -62,12 +62,15 @@ function makeGraphs(error, geojson) {
     L.mapbox.accessToken = "pk.eyJ1IjoidHJlaWdlcm0iLCJhIjoiY2lzNXU4bzllMDAwZTJ5bXcwajA1ZjdvYSJ9.OA1zmwAiQpIqL3tcHmBddg";
 
     // TODO: Use basic map
-    var map = L.mapbox.map("map", "mapbox.streets");
+    var map = L.mapbox.map("map");
+    var styleURL = "mapbox://styles/treigerm/cis6fwx1c002rhdkve5t2cncw";
+    L.mapbox.styleLayer(styleURL).addTo(map);
     var connectivityLayer = L.mapbox.featureLayer();
 
     var drawMap = function() {
         // Center map in Germany
         map.setView([51.9, 10.26], 5);
+
 
         // Add all selected rails
         connectivityLayer.setGeoJSON(allDim.top(Infinity)).addTo(map);
