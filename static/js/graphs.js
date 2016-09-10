@@ -1,14 +1,15 @@
 queue()
-    .defer(d3.json, "/data")
+    .defer(d3.json, "/static/data/bundeslaender_connectivity.geojson")
     .await(makeGraphs);
 
-function makeGraphs(error, geojson) {
+
+function makeGraphs(error, connectivity) {
     if (error) {
         console.error(error);
         return;
     }
 
-    var records = geojson.features;
+    var records = connectivity.features;
 
     // Create Crossfilter instance
     var ndx = crossfilter(records);
@@ -61,29 +62,31 @@ function makeGraphs(error, geojson) {
 
     L.mapbox.accessToken = "pk.eyJ1IjoidHJlaWdlcm0iLCJhIjoiY2lzNXU4bzllMDAwZTJ5bXcwajA1ZjdvYSJ9.OA1zmwAiQpIqL3tcHmBddg";
 
-    // TODO: Use basic map
     var map = L.mapbox.map("map");
+    // Center map in Germany
+    map.setView([51.9, 10.26], 5);
+
     var styleURL = "mapbox://styles/treigerm/cis6fwx1c002rhdkve5t2cncw";
     L.mapbox.styleLayer(styleURL).addTo(map);
     var connectivityLayer = L.mapbox.featureLayer();
 
+    // TODO: Don't recenter map on each redraw
     var drawMap = function() {
-        // Center map in Germany
-        map.setView([51.9, 10.26], 5);
-
-
         // Add all selected rails
         connectivityLayer.setGeoJSON(allDim.top(Infinity)).addTo(map);
 
         connectivityLayer.eachLayer(function(layer) {
-            // Function to scale the values in the interval [0.85,1] to the
-            // interval [0,1]
-            var customOpacity = (layer.feature.properties.stability - 0.85) / 0.15;
+            var color;
+            if (layer.feature.properties.stability < 0.9) {
+                color = "#A2EB80";
+            } else if (layer.feature.properties.stability < 0.95) {
+                color = "#79CC53";
+            } else {
+                color = "#55A72F";
+            }
 
-            // TODO: Styling
             layer.setStyle({
-                color: "#279E15",
-                opacity: customOpacity
+                color: color
             });
         });
     };
@@ -120,15 +123,17 @@ function makeGraphs(error, geojson) {
 
     dcCharts = [bundeslandChart, providerChart];
 
-    for (i = 0; i < dcCharts.length; i++) {
-        dcCharts[i].on("filtered", function (chart, filter) {
+    dcCharts.forEach(function(chart) {
+        chart.on("filtered", function (chart, filter) {
             drawMap();
         });
-    }
+    });
 
     // Display the dc graphs
     dc.renderAll();
 }
+
+// Functions from crossfilter documentation to reduce a group by average
 
 function reduceAddAvg(p, v) {
     ++p.count;
