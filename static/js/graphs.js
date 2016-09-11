@@ -66,7 +66,7 @@ function makeGraphs(error, connectivity) {
     // Center map in Germany
     map.setView([51.9, 10.26], 5);
 
-    var styleURL = "mapbox://styles/treigerm/cis6fwx1c002rhdkve5t2cncw";
+    var styleURL = "mapbox://styles/treigerm/cisymejke004n2xlecoij4koq";
     L.mapbox.styleLayer(styleURL).addTo(map);
     var connectivityLayer = L.mapbox.featureLayer();
 

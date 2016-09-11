@@ -6,9 +6,6 @@
   <link rel="stylesheet" href="{{url_for('static', filename='bower_components/bootstrap/dist/css/bootstrap.min.css')}}">
   <script src="{{url_for('static', filename='bower_components/bootstrap/dist/js/bootstrap.min.js')}}"></script>
 
-  <link rel="stylesheet" href="{{url_for('static', filename='bower_components/keen-dashboards/dist/keen-dashboards.css')}}">
-  <script src="{{url_for('static', filename='bower_components/keen-js/dist/keen.min.js')}}"></script>
-
   <script src="{{url_for('static', filename='bower_components/d3/d3.min.js')}}"></script>
   <script src="{{url_for('static', filename='bower_components/crossfilter/crossfilter.min.js')}}"></script>
   <script src="{{url_for('static', filename='bower_components/dcjs/dc.min.js')}}"></script>
@@ -26,7 +23,7 @@
 
   <style>
   #number-measurements-nd {
-    font-size: 55px;
+    font-size: 40px;
   }
 
   #map {
@@ -35,16 +32,27 @@
   }
 
   #charts {
-    background: "#00000";
+    position: fixed;
+    width: 400px;
+    /*background-color: #000;*/
+    overflow-y: scroll;
+    top: 0;
+    bottom: 0;
   }
 
   .map-wrapper {
+    position: relative;
     height: 100%;
-    min-height: 100%;
+    width: auto;
+    margin-left: 400px;
   }
 
-  html, body, .content {
+  html, body {
     height: 100%;
+  }
+
+  h5 {
+    padding-left: 20px;
   }
 
   .dc-chart g.row text {
@@ -55,39 +63,32 @@
 
 <body>
 
-    <div class="row content">
-
-      <div class="col-sm-4" id="charts">
-        <div class="row">
+      <div id="charts">
+        <div id="provider-wrapper">
           <!-- Provider -->
-          <div class="col-sm-12">
-            <div id="provider-row-chart"></div>
-          </div>
+          <h5>Mobile Providers</h5>
+          <div id="provider-row-chart"></div>
           <!-- Provider -->
         </div>
 
-        <div class="row">
+        <div class="bundesland-wrapper">
           <!-- Bundesland -->
-          <div class="col-sm-12">
-            <div id="bundesland-row-chart"></div>
-          </div>
+          <h5>Bundesländer</h5>
+          <div id="bundesland-row-chart"></div>
           <!-- Bundesland -->
         </div>
 
-        <div class="row">
+        <div class="measurements-wrapper">
           <!-- Number of events -->
-          <div class="col-sm-12">
-                <div id="number-measurements-nd"></div>
-          </div>
+          <h5>Measurements</h5>
+          <div id="number-measurements-nd"></div>
           <!-- Number of events -->
         </div>
       </div>
 
-      <div class="col-sm-8 map-wrapper">
+      <div class="map-wrapper">
           <div id="map"></div>
       </div>
-
-    </div>
 
 </body>
 </html>
