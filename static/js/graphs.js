@@ -60,7 +60,7 @@ function makeGraphs(error, connectivity) {
     .labelOffsetY(12)
     .xAxis().tickValues([0, 0.5, 1]).ticks(3);
 
-    L.mapbox.accessToken = "pk.eyJ1IjoidHJlaWdlcm0iLCJhIjoiY2lzNXU4bzllMDAwZTJ5bXcwajA1ZjdvYSJ9.OA1zmwAiQpIqL3tcHmBddg";
+    L.mapbox.accessToken = "[accessToken]";
 
     var map = L.mapbox.map("map");
     // Center map in Germany
