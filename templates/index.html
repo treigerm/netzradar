@@ -28,100 +28,66 @@
   #number-measurements-nd {
     font-size: 55px;
   }
+
+  #map {
+    width: 100%;
+    height: 100%;
+  }
+
+  #charts {
+    background: "#00000";
+  }
+
+  .map-wrapper {
+    height: 100%;
+    min-height: 100%;
+  }
+
+  html, body, .content {
+    height: 100%;
+  }
+
   .dc-chart g.row text {
     fill: black;
   }
   </style>
 </head>
 
-<body class="application">
+<body>
 
-  <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <a class="navbar-brand" href="./">DB Netzradar</a>
-      </div>
-    </div>
-  </div>
+    <div class="row content">
 
-  <div class="container-fluid">
-
-    <div class="row">
-
-      <div class="col-sm-4">
+      <div class="col-sm-4" id="charts">
         <div class="row">
           <!-- Provider -->
           <div class="col-sm-12">
-            <div class="chart-wrapper">
-              <div class="chart-title">
-                Provider
-              </div>
-              <div class="chart-stage">
-                <div id="provider-row-chart"></div>
-              </div>
-            </div>
+            <div id="provider-row-chart"></div>
           </div>
           <!-- Provider -->
         </div>
 
         <div class="row">
+          <!-- Bundesland -->
+          <div class="col-sm-12">
+            <div id="bundesland-row-chart"></div>
+          </div>
+          <!-- Bundesland -->
+        </div>
+
+        <div class="row">
           <!-- Number of events -->
           <div class="col-sm-12">
-            <div class="chart-wrapper">
-              <div class="chart-title">
-                Number of Measurements
-              </div>
-              <div class="chart-stage">
                 <div id="number-measurements-nd"></div>
-              </div>
-            </div>
           </div>
           <!-- Number of events -->
         </div>
       </div>
 
-      <div class="col-sm-4">
-        <div class="row">
-
-          <!-- Bundesland -->
-          <div class="col-sm-12">
-            <div class="chart-wrapper">
-              <div class="chart-title">
-                Bundesland
-              </div>
-              <div class="chart-stage">
-                <div id="bundesland-row-chart"></div>
-              </div>
-            </div>
-          </div>
-          <!-- Bundesland -->
-        </div>
-      </div>
-
-      <div class="col-sm-4">
-
-        <div class="row">
-          <!-- Map -->
-          <div class="col-sm-12">
-            <div class="chart-wrapper">
-              <div class="chart-title">
-                Map
-              </div>
-              <div class="chart-stage">
-                <div id="map" style="width: 400px; height: 420px"></div>
-              </div>
-            </div>
-          </div>
-          <!-- Map -->
-        </div>
-
+      <div class="col-sm-8 map-wrapper">
+          <div id="map"></div>
       </div>
 
     </div>
 
-  </div>
-
-  <hr>
-  <p class="small text-muted">Built with &#9829; by <a href="https://keen.io">Keen IO</a></p>
 </body>
 </html>

@@ -51,7 +51,7 @@ function makeGraphs(error, connectivity) {
 
     providerChart
     .width(400)
-    .height(280)
+    .height(160)
     .dimension(providerDim)
     .group(providerGroup)
     .ordering(function(d) { return -d.value.avg; })
