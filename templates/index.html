@@ -24,6 +24,9 @@
   <style>
   #number-measurements-nd {
     font-size: 40px;
+    margin-right: 35px;
+    float: right;
+    color: #fff;
   }
 
   #map {
@@ -34,10 +37,17 @@
   #charts {
     position: fixed;
     width: 400px;
-    /*background-color: #000;*/
+    background-color: #404040;
     overflow-y: scroll;
     top: 0;
     bottom: 0;
+  }
+
+  #provider-row-chart, #bundesland-row-chart {
+    border-bottom: 1px;
+    margin-bottom: 15px;
+    border-bottom-color: rgba(255,255,255,.1);
+    border-bottom-style: solid;
   }
 
   .map-wrapper {
@@ -52,11 +62,24 @@
   }
 
   h5 {
+    color: rgba(255,255,255,.5);
     padding-left: 20px;
   }
 
-  .dc-chart g.row text {
-    fill: black;
+  .dc-chart g.axis text {
+    fill: #fff;
+  }
+
+  .dc-chart rect.deselected {
+    fill: #A8A8A8;
+  }
+
+  .dc-chart g.row rect {
+    fill-opacity: 1;
+  }
+
+  .axis line, .dc-chart .axis path {
+    stroke: #787878;
   }
   </style>
 </head>

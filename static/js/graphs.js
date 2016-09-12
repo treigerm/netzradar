@@ -45,7 +45,7 @@ function makeGraphs(error, connectivity) {
     .group(bundeslandGroup)
     .ordering(function(d) { return -d.value.avg; })
     .valueAccessor(function(d) { return d.value.avg; })
-    .colors(['#6baed6'])
+    .colors(["#787878"])
     .labelOffsetY(12)
     .xAxis().tickValues([0, 0.5, 1]).ticks(3);
 
@@ -56,15 +56,21 @@ function makeGraphs(error, connectivity) {
     .group(providerGroup)
     .ordering(function(d) { return -d.value.avg; })
     .valueAccessor(function(d) { return d.value.avg; })
-    .colors(['#6baed6'])
+    .colors(["#787878"])
     .labelOffsetY(12)
     .xAxis().tickValues([0, 0.5, 1]).ticks(3);
 
-    L.mapbox.accessToken = "pk.eyJ1IjoidHJlaWdlcm0iLCJhIjoiY2lzNXU4bzllMDAwZTJ5bXcwajA1ZjdvYSJ9.OA1zmwAiQpIqL3tcHmBddg";
+    L.mapbox.accessToken = "pk.eyJ1IjoidHJlaWdlcm0iLCJhIjoiY2lzeXAzNHQ4MDA0ZjJ5cGRmZ2F1NzV6YSJ9.ArS225n_3FVtM2TigmTing";
 
     var map = L.mapbox.map("map");
-    // Center map in Germany
-    map.setView([51.9, 10.26], 5);
+
+    var germanyBounds = [
+        [55, 9],
+        [51, 6],
+        [46, 10],
+        [52, 16]
+    ];
+    map.fitBounds(germanyBounds);
 
     var styleURL = "mapbox://styles/treigerm/cisymejke004n2xlecoij4koq";
     L.mapbox.styleLayer(styleURL).addTo(map);
