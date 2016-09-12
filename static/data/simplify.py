@@ -25,5 +25,3 @@ for feature in tqdm(data["features"]):
 
 with open("simple_connectivity.geojson", "w+") as f:
     json.dump(featureCollection, f)
-
-# TODO: Transform decimals into percent values

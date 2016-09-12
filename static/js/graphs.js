@@ -34,7 +34,7 @@ function makeGraphs(error, connectivity) {
     var providerChart = dc.rowChart("#provider-row-chart");
 
     numberMeasurements
-    .formatNumber(d3.format("d"))
+    .formatNumber(d3.format("0,000"))
     .valueAccessor(function(d) { return d; })
     .group(measurementsGroup);
 
@@ -58,11 +58,9 @@ function makeGraphs(error, connectivity) {
     .valueAccessor(function(d) { return d.value.avg; })
     .colors(["#787878"])
     .labelOffsetY(12)
-    .xAxis().tickValues([0, 0.5, 1]).ticks(3);
+    .xAxis().tickValues(d3.range(0, 1.5, 0.5)).ticks(3);
 
     L.mapbox.accessToken = "pk.eyJ1IjoidHJlaWdlcm0iLCJhIjoiY2lzeXAzNHQ4MDA0ZjJ5cGRmZ2F1NzV6YSJ9.ArS225n_3FVtM2TigmTing";
-
-    var map = L.mapbox.map("map");
 
     var germanyBounds = [
         [55, 9],
@@ -70,13 +68,18 @@ function makeGraphs(error, connectivity) {
         [46, 10],
         [52, 16]
     ];
-    map.fitBounds(germanyBounds);
+    var map = L.mapbox.map("map").fitBounds(germanyBounds);
+
+    map.zoomControl.removeFrom(map);
+    new L.Control.Zoom({ position: "topright" }).addTo(map);
+
+    map.legendControl.addLegend(document.getElementById('legend').innerHTML);
 
     var styleURL = "mapbox://styles/treigerm/cisymejke004n2xlecoij4koq";
     L.mapbox.styleLayer(styleURL).addTo(map);
+    
     var connectivityLayer = L.mapbox.featureLayer();
 
-    // TODO: Don't recenter map on each redraw
     var drawMap = function() {
         // Add all selected rails
         connectivityLayer.setGeoJSON(allDim.top(Infinity)).addTo(map);

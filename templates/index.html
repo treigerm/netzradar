@@ -15,103 +15,52 @@
   <script src="{{url_for('static', filename='bower_components/leaflet/dist/leaflet.js')}}"></script>
 
   <script src="{{url_for('static', filename='bower_components/mapbox.js/mapbox.js')}}"></script>
-  <link href="{{url_for('static', filename='bower_components/mapbox.js/mapbox.css')}}" rel="stylesheet" />
+  <link rel="stylesheet" href="{{url_for('static', filename='bower_components/mapbox.js/mapbox.css')}}" />
 
   <script src="{{url_for('static', filename='bower_components/d3-queue/queue.js')}}"></script>
 
-  <script src="./static/js/graphs.js" type="text/javascript"></script>
-
-  <style>
-  #number-measurements-nd {
-    font-size: 40px;
-    margin-right: 35px;
-    float: right;
-    color: #fff;
-  }
-
-  #map {
-    width: 100%;
-    height: 100%;
-  }
-
-  #charts {
-    position: fixed;
-    width: 400px;
-    background-color: #404040;
-    overflow-y: scroll;
-    top: 0;
-    bottom: 0;
-  }
-
-  #provider-row-chart, #bundesland-row-chart {
-    border-bottom: 1px;
-    margin-bottom: 15px;
-    border-bottom-color: rgba(255,255,255,.1);
-    border-bottom-style: solid;
-  }
-
-  .map-wrapper {
-    position: relative;
-    height: 100%;
-    width: auto;
-    margin-left: 400px;
-  }
-
-  html, body {
-    height: 100%;
-  }
-
-  h5 {
-    color: rgba(255,255,255,.5);
-    padding-left: 20px;
-  }
-
-  .dc-chart g.axis text {
-    fill: #fff;
-  }
-
-  .dc-chart rect.deselected {
-    fill: #A8A8A8;
-  }
-
-  .dc-chart g.row rect {
-    fill-opacity: 1;
-  }
-
-  .axis line, .dc-chart .axis path {
-    stroke: #787878;
-  }
-  </style>
+  <script src="{{url_for('static', filename='js/graphs.js')}}" type="text/javascript"></script>
+  <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}"/>
 </head>
 
 <body>
 
       <div id="charts">
         <div id="provider-wrapper">
-          <!-- Provider -->
           <h5>Mobile Providers</h5>
           <div id="provider-row-chart"></div>
-          <!-- Provider -->
         </div>
 
         <div class="bundesland-wrapper">
-          <!-- Bundesland -->
           <h5>Bundesländer</h5>
           <div id="bundesland-row-chart"></div>
-          <!-- Bundesland -->
         </div>
 
         <div class="measurements-wrapper">
-          <!-- Number of events -->
           <h5>Measurements</h5>
           <div id="number-measurements-nd"></div>
-          <!-- Number of events -->
         </div>
       </div>
 
       <div class="map-wrapper">
           <div id="map"></div>
       </div>
+
+      <!-- Legend for map which is initated from JS -->
+      <div id='legend' style='display:none;'>
+        <strong>Netzradar</strong>
+        <nav class='legend clearfix'>
+          <span style='background:#7A7A7A;'></span>
+          <span style='background:#A2EB80;'></span>
+          <span style='background:#79CC53;'></span>
+          <span style='background:#55A72F;'></span>
+          <label>None</label>
+          <label>0 - 90%</label>
+          <label>90 - 95%</label>
+          <label>95 - 100%</label>
+          <small>Source: <a href="http://data.deutschebahn.com/dataset/data-netzradar">DB Open Data</a></small>
+      </div>
+      <!-- Legend -->
 
 </body>
 </html>
