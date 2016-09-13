@@ -2,6 +2,7 @@ queue()
     .defer(d3.json, "/static/data/bundeslaender_connectivity.geojson")
     .await(makeGraphs);
 
+// TODO: Refactoring
 
 function makeGraphs(error, connectivity) {
     if (error) {
@@ -77,7 +78,7 @@ function makeGraphs(error, connectivity) {
 
     var styleURL = "mapbox://styles/treigerm/cisymejke004n2xlecoij4koq";
     L.mapbox.styleLayer(styleURL).addTo(map);
-    
+
     var connectivityLayer = L.mapbox.featureLayer();
 
     var drawMap = function() {
@@ -141,6 +142,12 @@ function makeGraphs(error, connectivity) {
     // Display the dc graphs
     dc.renderAll();
 }
+
+$(document).ready(function() {
+    $("#nav-toggle").click(function () {
+        $(".map-wrapper").toggleClass("toggle");
+    });
+});
 
 // Functions from crossfilter documentation to reduce a group by average
 
