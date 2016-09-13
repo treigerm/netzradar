@@ -2,6 +2,7 @@ queue()
     .defer(d3.json, "/static/data/bundeslaender_connectivity.geojson")
     .await(makeGraphs);
 
+// TODO: Refactoring
 
 function makeGraphs(error, connectivity) {
     if (error) {
@@ -34,7 +35,7 @@ function makeGraphs(error, connectivity) {
     var providerChart = dc.rowChart("#provider-row-chart");
 
     numberMeasurements
-    .formatNumber(d3.format("d"))
+    .formatNumber(d3.format("0,000"))
     .valueAccessor(function(d) { return d; })
     .group(measurementsGroup);
 
@@ -45,7 +46,7 @@ function makeGraphs(error, connectivity) {
     .group(bundeslandGroup)
     .ordering(function(d) { return -d.value.avg; })
     .valueAccessor(function(d) { return d.value.avg; })
-    .colors(['#6baed6'])
+    .colors(["#787878"])
     .labelOffsetY(12)
     .xAxis().tickValues([0, 0.5, 1]).ticks(3);
 
@@ -56,21 +57,30 @@ function makeGraphs(error, connectivity) {
     .group(providerGroup)
     .ordering(function(d) { return -d.value.avg; })
     .valueAccessor(function(d) { return d.value.avg; })
-    .colors(['#6baed6'])
+    .colors(["#787878"])
     .labelOffsetY(12)
-    .xAxis().tickValues([0, 0.5, 1]).ticks(3);
+    .xAxis().tickValues(d3.range(0, 1.5, 0.5)).ticks(3);
 
     L.mapbox.accessToken = "[accessToken]";
 
-    var map = L.mapbox.map("map");
-    // Center map in Germany
-    map.setView([51.9, 10.26], 5);
+    var germanyBounds = [
+        [55, 9],
+        [51, 6],
+        [46, 10],
+        [52, 16]
+    ];
+    var map = L.mapbox.map("map").fitBounds(germanyBounds);
+
+    map.zoomControl.removeFrom(map);
+    new L.Control.Zoom({ position: "topright" }).addTo(map);
+
+    map.legendControl.addLegend(document.getElementById('legend').innerHTML);
 
     var styleURL = "mapbox://styles/treigerm/cisymejke004n2xlecoij4koq";
     L.mapbox.styleLayer(styleURL).addTo(map);
+
     var connectivityLayer = L.mapbox.featureLayer();
 
-    // TODO: Don't recenter map on each redraw
     var drawMap = function() {
         // Add all selected rails
         connectivityLayer.setGeoJSON(allDim.top(Infinity)).addTo(map);
@@ -132,6 +142,12 @@ function makeGraphs(error, connectivity) {
     // Display the dc graphs
     dc.renderAll();
 }
+
+$(document).ready(function() {
+    $("#nav-toggle").click(function () {
+        $(".map-wrapper").toggleClass("toggle");
+    });
+});
 
 // Functions from crossfilter documentation to reduce a group by average
 
