@@ -1,17 +1,21 @@
 import json
 from tqdm import tqdm
 
+providers = ["t-mobile", "vodafone", "o2", "e-plus", "all"]
+
 with open("bundeslaender_connectivity.geojson") as f:
     data = json.load(f)
 
 
 def simplifyFeature(feature):
+    providerIndex = providers.index(feature["provider"])
+
     return {
         "type": "Feature",
         "geometry": feature["geometry"],
         "p": [feature["properties"]["stability"],
               feature["properties"]["measurements"],
-              feature["provider"],
+              providerIndex,
               feature["bundesland"]]
     }
 

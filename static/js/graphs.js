@@ -2,7 +2,42 @@ queue()
     .defer(d3.json, "/static/data/bundeslaender_connectivity.geojson")
     .await(makeGraphs);
 
-// TODO: Refactoring
+function makeGraphs(error, connectivity) {
+    if (error) {
+        console.error(error);
+        return;
+    }
+
+    var records = connectivity.features;
+
+    // Create Crossfilter instance
+    var ndx = crossfilter(records);
+
+    dimensions = createDimensions(ndx);
+    groups = createGroups(dimensions);
+
+    createMeasurementsDisplay(groups.measurements);
+    var bundeslandChart = createBundeslandChart(dimensions.bundesland, groups.bundesland);
+    var providerChart = createProviderChart(dimensions.provider, groups.provider);
+
+    // Select "all" in the beginning
+    providerChart.filter("all");
+
+    var mapData = createMap();
+
+    dcCharts = [bundeslandChart, providerChart];
+    dcCharts.forEach(function(chart) {
+        chart.on("filtered", function (chart, filter) {
+            drawMap(mapData, dimensions.all.top(Infinity));
+        });
+    });
+
+    // Display the dc graphs
+    dc.renderAll();
+    drawMap(mapData, dimensions.all.top(Infinity));
+}
+
+/* Helper functions for drawing graphs */
 
 var createDimensions = function(ndx) {
     var bundeslandDim = ndx.dimension(function(d) { return d.bundesland; });
@@ -166,44 +201,3 @@ var drawMap = function(mapData, data) {
         });
     });
 };
-
-function makeGraphs(error, connectivity) {
-    if (error) {
-        console.error(error);
-        return;
-    }
-
-    var records = connectivity.features;
-
-    // Create Crossfilter instance
-    var ndx = crossfilter(records);
-
-    dimensions = createDimensions(ndx);
-    groups = createGroups(dimensions);
-
-    createMeasurementsDisplay(groups.measurements);
-    var bundeslandChart = createBundeslandChart(dimensions.bundesland, groups.bundesland);
-    var providerChart = createProviderChart(dimensions.provider, groups.provider);
-
-    // Select "all" in the beginning
-    providerChart.filter("all");
-
-    var mapData = createMap();
-
-    dcCharts = [bundeslandChart, providerChart];
-    dcCharts.forEach(function(chart) {
-        chart.on("filtered", function (chart, filter) {
-            drawMap(mapData, dimensions.all.top(Infinity));
-        });
-    });
-
-    // Display the dc graphs
-    dc.renderAll();
-    drawMap(mapData, dimensions.all.top(Infinity));
-}
-
-$(document).ready(function() {
-    $("#nav-toggle").click(function () {
-        $(".map-wrapper").toggleClass("toggle");
-    });
-});

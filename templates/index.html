@@ -45,6 +45,13 @@
       <div class="map-wrapper">
           <div id="map"></div>
           <a id="nav-toggle">&#9776;</a>
+          <script>
+            $(document).ready(function() {
+              $("#nav-toggle").click(function () {
+                  $(".map-wrapper").toggleClass("toggle");
+              });
+            });
+          </script>
       </div>
 
       <!-- Legend for map which is initated from JS -->
