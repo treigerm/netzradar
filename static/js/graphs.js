@@ -20,24 +20,25 @@ function makeGraphs(error, connectivity) {
     var bundeslandChart = createBundeslandChart(dimensions.bundesland, groups.bundesland);
     var providerChart = createProviderChart(dimensions.provider, groups.provider);
 
-    // Select "all" in the beginning
-    providerChart.filter("all");
-
-    var mapData = createMap();
-
+    // Add listeners to the charts so we update the map each time
+    // the user selects a specific Bundesland or provider.
     dcCharts = [bundeslandChart, providerChart];
     dcCharts.forEach(function(chart) {
         chart.on("filtered", function (chart, filter) {
-            drawMap(mapData, dimensions.all.top(Infinity));
+            map.update(dimensions.all.top(Infinity));
         });
     });
 
     // Display the dc graphs
     dc.renderAll();
-    drawMap(mapData, dimensions.all.top(Infinity));
+    // Display the map
+    map.init();
+    map.update(dimensions.all.top(Infinity));
 }
 
-/* Helper functions for drawing graphs */
+/*
+ * Crossfilter helper functions
+ */
 
 var createDimensions = function(ndx) {
     var bundeslandDim = ndx.dimension(function(d) { return d.bundesland; });
@@ -53,7 +54,7 @@ var createDimensions = function(ndx) {
 
 var createGroups = function(dimensions) {
     var groupByAverage = function(dimension) {
-        // Functions from crossfilter documentation to reduce a group by average
+        // Functions from crossfilter documentation to reduce a group by average.
         var reduceAddAvg = function(p, v) {
             ++p.count;
             p.sum += v.properties.stability;
@@ -83,6 +84,10 @@ var createGroups = function(dimensions) {
         measurements: measurementsGroup
     };
 };
+
+/*
+ * Helper functions to create the graphs.
+ */
 
 var createMeasurementsDisplay = function (measurementsGroup) {
     var numberMeasurements = dc.numberDisplay("#number-measurements-nd");
@@ -152,52 +157,63 @@ var createProviderChart = function (providerDim, providerGroup) {
         oc.call(providerChart, d);
     };
 
+    // Select "all" in the beginning since otherwise we would select every category
+    // from the start which we don't want.
+    providerChart.filter("all");
+
     return providerChart;
 };
 
-var createMap = function() {
-    L.mapbox.accessToken = "pk.eyJ1IjoidHJlaWdlcm0iLCJhIjoiY2lzeXAzNHQ4MDA0ZjJ5cGRmZ2F1NzV6YSJ9.ArS225n_3FVtM2TigmTing";
+/*
+ * Helper object for the map.
+ */
 
-    var germanyBounds = [
-        [55, 9],
-        [51, 6],
-        [46, 10],
-        [52, 16]
-    ];
-    var map = L.mapbox.map("map").fitBounds(germanyBounds);
+var map = {
+    init: function() {
+        L.mapbox.accessToken = "pk.eyJ1IjoidHJlaWdlcm0iLCJhIjoiY2lzeXAzNHQ4MDA0ZjJ5cGRmZ2F1NzV6YSJ9.ArS225n_3FVtM2TigmTing";
 
-    map.zoomControl.removeFrom(map);
-    new L.Control.Zoom({ position: "topright" }).addTo(map);
+        var germanyBounds = [
+            [55, 9],
+            [51, 6],
+            [46, 10],
+            [52, 16]
+        ];
+        this.map = L.mapbox.map("map").fitBounds(germanyBounds);
 
-    map.legendControl.addLegend(document.getElementById('legend').innerHTML);
+        // Put the zoom control in the topright corner so that we can place the menu toggle in
+        // the topleft corner.
+        this.map.zoomControl.removeFrom(this.map);
+        new L.Control.Zoom({ position: "topright" }).addTo(this.map);
 
-    var styleURL = "mapbox://styles/treigerm/cisymejke004n2xlecoij4koq";
-    L.mapbox.styleLayer(styleURL).addTo(map);
+        // Add the legend with HTML specified in index.html.
+        this.map.legendControl.addLegend(document.getElementById('legend').innerHTML);
 
-    var connectivityLayer = L.mapbox.featureLayer();
+        // Add our custom mapbox style.
+        var styleURL = "mapbox://styles/treigerm/cisymejke004n2xlecoij4koq";
+        L.mapbox.styleLayer(styleURL).addTo(this.map);
 
-    return {
-        map: map,
-        connectivityLayer: connectivityLayer
-    };
-};
+        // Add the layer on which we will display our connectivity layer.
+        this.connectivityLayer = L.mapbox.featureLayer();
+    },
+    update: function(data) {
+        // Overwrite the current GeoJSON with the new data.
+        this.connectivityLayer.setGeoJSON(data).addTo(this.map);
 
-var drawMap = function(mapData, data) {
-    // Add all selected rails
-    mapData.connectivityLayer.setGeoJSON(data).addTo(mapData.map);
+        // Color each rail section in a shade of green determined
+        // by its stability value.
+        this.connectivityLayer.eachLayer(function(layer) {
+            var color;
+            if (layer.feature.properties.stability < 0.9) {
+                color = "#A2EB80";
+            } else if (layer.feature.properties.stability < 0.95) {
+                color = "#79CC53";
+            } else {
+                color = "#55A72F";
+            }
 
-    mapData.connectivityLayer.eachLayer(function(layer) {
-        var color;
-        if (layer.feature.properties.stability < 0.9) {
-            color = "#A2EB80";
-        } else if (layer.feature.properties.stability < 0.95) {
-            color = "#79CC53";
-        } else {
-            color = "#55A72F";
-        }
-
-        layer.setStyle({
-            color: color
+            layer.setStyle({
+                color: color
+            });
         });
-    });
+    }
 };
