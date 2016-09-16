@@ -1,3 +1,5 @@
+var mapboxAccessToken = "[accessToken]";
+
 queue()
     .defer(d3.json, "/static/data/bundeslaender_connectivity.geojson")
     .await(makeGraphs);
@@ -100,36 +102,36 @@ var createMeasurementsDisplay = function (measurementsGroup) {
     return numberMeasurements;
 };
 
-var createBundeslandChart = function(bundeslandDim, bundeslandGroup) {
-    var bundeslandChart = dc.rowChart("#bundesland-row-chart");
+var createBaseChart = function(chartSelector, dimension, group) {
+    var chart = dc.rowChart(chartSelector);
 
-    bundeslandChart
+    chart
     .width(400)
-    .height(420)
-    .dimension(bundeslandDim)
-    .group(bundeslandGroup)
+    .dimension(dimension)
+    .group(group)
     .ordering(function(d) { return -d.value.avg; })
     .valueAccessor(function(d) { return d.value.avg; })
     .colors(["#787878"])
     .labelOffsetY(12)
     .xAxis().tickValues([0, 0.5, 1]).ticks(3);
 
+    return chart;
+};
+
+var createBundeslandChart = function(bundeslandDim, bundeslandGroup) {
+    var bundeslandChart = createBaseChart("#bundesland-row-chart", bundeslandDim, bundeslandGroup);
+
+    bundeslandChart
+    .height(420);
+
     return bundeslandChart;
 };
 
 var createProviderChart = function (providerDim, providerGroup) {
-    var providerChart = dc.rowChart("#provider-row-chart");
+    var providerChart = createBaseChart("#provider-row-chart", providerDim, providerGroup);
 
     providerChart
-    .width(400)
-    .height(160)
-    .dimension(providerDim)
-    .group(providerGroup)
-    .ordering(function(d) { return -d.value.avg; })
-    .valueAccessor(function(d) { return d.value.avg; })
-    .colors(["#787878"])
-    .labelOffsetY(12)
-    .xAxis().tickValues(d3.range(0, 1.5, 0.5)).ticks(3);
+    .height(160);
 
     // Ensure that if "all" is selected and you click on another provider
     // we deselect all again.
@@ -170,7 +172,7 @@ var createProviderChart = function (providerDim, providerGroup) {
 
 var map = {
     init: function() {
-        L.mapbox.accessToken = "pk.eyJ1IjoidHJlaWdlcm0iLCJhIjoiY2lzeXAzNHQ4MDA0ZjJ5cGRmZ2F1NzV6YSJ9.ArS225n_3FVtM2TigmTing";
+        L.mapbox.accessToken = mapboxAccessToken;
 
         var germanyBounds = [
             [55, 9],
