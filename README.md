@@ -1,6 +1,8 @@
 # What is this?
 A visualisation of the "Netzradar" dataset from [DB Open Data](http://data.deutschebahn.com/dataset/data-netzradar). It contains data about the stability of the internet connection on the German rail network for popular German mobile service providers.
 
+![Demo](netzradar_demo.gif)
+
 # Why did I do this?
 In a broader sense I am currently trying to get into Data Science and Machine Learning so data visualisation was a natural first step. Moreover, I am really interested in the analysis of geospatial data and always in search for public data sets to work with. In summary, this project allowed me to get familiar with popular JavaScript data visualisation tools, namely DC.js and crossfilter.js, work with GeoJSON and learn how to create simple maps and customise them.
 

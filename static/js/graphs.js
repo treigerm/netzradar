@@ -1,4 +1,4 @@
-var mapboxAccessToken = "[accessToken]";
+var mapboxAccessToken = "pk.eyJ1IjoidHJlaWdlcm0iLCJhIjoiY2lzeXAzNHQ4MDA0ZjJ5cGRmZ2F1NzV6YSJ9.ArS225n_3FVtM2TigmTing";
 
 queue()
     .defer(d3.json, "/static/data/bundeslaender_connectivity.geojson")
@@ -147,8 +147,8 @@ var createProviderChart = function (providerDim, providerGroup) {
             return;
         }
 
-        var had_all = filters.indexOf("all") >= 0;
-        var select_all = d.key === "all";
+        var had_all = filters.indexOf("All") >= 0;
+        var select_all = d.key === "All";
         if (had_all || select_all) {
             // If "all" was selected or we want to select "all"
             // remove the previous filters.
@@ -161,7 +161,7 @@ var createProviderChart = function (providerDim, providerGroup) {
 
     // Select "all" in the beginning since otherwise we would select every category
     // from the start which we don't want.
-    providerChart.filter("all");
+    providerChart.filter("All");
 
     return providerChart;
 };

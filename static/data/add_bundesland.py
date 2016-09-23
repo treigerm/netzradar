@@ -23,7 +23,11 @@ def get_bundesland(longitude, latitude, bundeslaender):
 def make_features(feature):
     """For each given feature create five new features (one for each provider) and only use the
     general connectivity stability values and measurements."""
-    providers = ["all", "t-mobile", "vodafone", "e-plus", "o2"]
+    providers = [("all", "All"),
+                 ("t-mobile", "T-Mobile"),
+                 ("vodafone", "Vodafone"),
+                 ("e-plus", "E-Plus"),
+                 ("o2", "O2")]
     features = []
 
     try:
@@ -36,9 +40,9 @@ def make_features(feature):
         # If we cannot determine the Bundesland, skip this feature
         return
 
-    for provider in providers:
-        stability = feature["properties"][provider + "_stability"]
-        measurements = feature["properties"][provider + "_measurements"]
+    for provider_lowercase, provider_uppercase in providers:
+        stability = feature["properties"][provider_lowercase + "_stability"]
+        measurements = feature["properties"][provider_lowercase + "_measurements"]
 
         if measurements == 0:
             continue
@@ -47,7 +51,7 @@ def make_features(feature):
             "type": feature["type"],
             "geometry": feature["geometry"],
             "properties": {"stability": stability, "measurements": measurements},
-            "provider": provider,
+            "provider": provider_uppercase,
             "bundesland": bundesland
         })
 
@@ -62,6 +66,7 @@ if __name__ == '__main__':
     with open("bundeslaender.geojson") as f:
         bundeslaender = json.load(f)
 
+    # create dict which stores the end result
     featureCollection = {
         "type": "FeatureCollection",
         "features": []
