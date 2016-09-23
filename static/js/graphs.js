@@ -1,4 +1,4 @@
-var mapboxAccessToken = "pk.eyJ1IjoidHJlaWdlcm0iLCJhIjoiY2lzeXAzNHQ4MDA0ZjJ5cGRmZ2F1NzV6YSJ9.ArS225n_3FVtM2TigmTing";
+var mapboxAccessToken = "[accessToken]";
 
 queue()
     .defer(d3.json, "/static/data/bundeslaender_connectivity.geojson")
