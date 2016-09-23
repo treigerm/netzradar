@@ -1,8 +1,6 @@
 # What is this?
 A visualisation of the "Netzradar" dataset from [DB Open Data](http://data.deutschebahn.com/dataset/data-netzradar). It contains data about the stability of the internet connection on the German rail network for popular German mobile service providers.
 
-![Demo](netzradar_demo.gif)
-![Demo](netzradar_demo_mid.gif)
 ![Demo](netzradar_demo_high.gif)
 
 # Why did I do this?
